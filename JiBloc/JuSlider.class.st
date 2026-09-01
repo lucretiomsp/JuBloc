@@ -2,7 +2,8 @@ Class {
 	#name : 'JuSlider',
 	#superclass : 'BlElement',
 	#instVars : [
-		'defaultStyle'
+		'defaultStyle',
+		'textEntryBoxPosition'
 	],
 	#category : 'JiBloc-widgets',
 	#package : 'JiBloc',
@@ -14,8 +15,22 @@ JuSlider >> defaultStyle [
 	^ defaultStyle
 ]
 
+{ #category : 'accessing - styles' }
+JuSlider >> defaultStyle: aSliderStyle [
+
+"#LinearHorizontal , #LinearVertical , #LinearBar , #LinearBarVertical , #Rotary , #RotaryHorizontalDrag , RotaryVerticalDrag , #RotaryHorizontalVerticalDrag , #IncDecButtons , #TwoValueHorizontal , #TwoValueVertical , #ThreeValueHorizontal , #ThreeValueVertical"
+
+defaultStyle := aSliderStyle 
+]
+
 { #category : 'initialization' }
 JuSlider >> initialize [ 
 super initialize .
-defaultStyle := #LinearHorizontal 
+defaultStyle := #LinearHorizontal.
+textEntryBoxPosition := #none 
+]
+
+{ #category : 'accessing' }
+JuSlider >> textEntryBoxPosition [
+	^ textEntryBoxPosition
 ]
