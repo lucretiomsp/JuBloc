@@ -57,3 +57,11 @@ Class {
 	#package : 'JuBloc',
 	#tag : 'LookAndFeel'
 }
+
+{ #category : 'drawing' }
+JuLookAndFeel >> drawLinearSliderOn: aGraphics bounds: aRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos style: aStyle slider: aSlider [
+	"Draw the whole linear slider into aGraphics. aRectangle has integer coordinates and is parent-relative. sliderPos, minSliderPos and maxSliderPos are pixel positions along the slider's axis, not proportions."
+	self subclassResponsibility 
+
+	
+]
