@@ -30,7 +30,14 @@ defaultStyle := #LinearHorizontal.
 textEntryBoxPosition := #none 
 ]
 
-{ #category : 'accessing' }
-JuSlider >> textEntryBoxPosition [
-	^ textEntryBoxPosition
+{ #category : 'accessing - styles' }
+JuSlider >> textEntryBoxPosition [ 
+	^ textEntryBoxPosition 
+]
+
+{ #category : 'accessing - styles' }
+JuSlider >> textEntryBoxPosition: aPosition [ 
+	
+" #none , #left , #right , #above"
+	 textEntryBoxPosition := aPosition 
 ]
