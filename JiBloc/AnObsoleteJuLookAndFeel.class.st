@@ -1,5 +1,5 @@
 Class {
-	#name : 'JuLookAndFeel',
+	#name : 'AnObsoleteJuLookAndFeel',
 	#superclass : 'Object',
 	#traits : 'JuButtonLookAndFeelMethods + JuSliderLookAndFeelMethods',
 	#classTraits : 'JuButtonLookAndFeelMethods classTrait + JuSliderLookAndFeelMethods classTrait',
@@ -7,7 +7,7 @@ Class {
 		'colours',
 		'defaultFont'
 	],
-	#category : 'JiBloc-LookAndFeel',
-	#package : 'JiBloc',
-	#tag : 'LookAndFeel'
+	#category : 'JiBloc-LookAndFeel-lookAndFeel',
+	#package : 'JiBloc-LookAndFeel',
+	#tag : 'lookAndFeel'
 }
