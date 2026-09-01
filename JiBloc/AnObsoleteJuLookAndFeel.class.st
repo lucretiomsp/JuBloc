@@ -7,7 +7,7 @@ Class {
 		'colours',
 		'defaultFont'
 	],
-	#category : 'JiBloc-LookAndFeel-lookAndFeel',
-	#package : 'JiBloc-LookAndFeel',
-	#tag : 'lookAndFeel'
+	#category : 'JiBloc-LookAndFeel',
+	#package : 'JiBloc',
+	#tag : 'LookAndFeel'
 }
