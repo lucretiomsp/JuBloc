@@ -32,8 +32,8 @@ Class {
 }
 
 { #category : 'geometry' }
-JuSliderOrientation >> crossExtentOf: aRectangle [
-"The extent across my axis: height for horizontal, width for vertical."
+JuSliderOrientation >> crossExtentOf: aJRectangle [
+	"The extent across my axis: height for horizontal, width for vertical."
 
 	^ self subclassResponsibility
 ]
@@ -50,8 +50,9 @@ JuSliderOrientation >> isHorizontal [
 ]
 
 { #category : 'geometry' }
-JuSliderOrientation >> pointAt: aPosition in: aRectangle [
-"Lift a pixel position on my axis to a Point."
+JuSliderOrientation >> pointAt: aPosition in: aJRectangle [
+	"Lift a pixel position on my axis to a Point."
+
 	^ self subclassResponsibility
 ]
 
@@ -68,14 +69,15 @@ JuSliderOrientation >> thumbDiameterIn: aJuRectangle [
 ]
 
 { #category : 'geometry' }
-JuSliderOrientation >> trackEndIn: aRectangle [
+JuSliderOrientation >> trackEndIn: aJRectangle [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'geometry' }
-JuSliderOrientation >> trackStartIn: aRectangle [
-"The track's low-value end. Bottom for vertical, matching JUCE's path order."
+JuSliderOrientation >> trackStartIn: aJRectangle [
+	"The track's low-value end. Bottom for vertical, matching JUCE's path order."
+
 	^ self subclassResponsibility
 ]
 
