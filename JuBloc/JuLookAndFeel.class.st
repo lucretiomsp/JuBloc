@@ -50,16 +50,57 @@ Class {
 	#name : 'JuLookAndFeel',
 	#superclass : 'Object',
 	#instVars : [
-		'colours',
-		'defaultFont'
+		'colours'
+	],
+	#classInstVars : [
+		'default'
 	],
 	#category : 'JuBloc-LookAndFeel',
 	#package : 'JuBloc',
 	#tag : 'LookAndFeel'
 }
 
-{ #category : 'drawing' }
-JuLookAndFeel >> drawLinearSliderIn: aRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos slider: aSlider [
+{ #category : 'accessing' }
+JuLookAndFeel class >> default [
+	^ default ifNil: [ default := JuLookAndFeelV4 new ]
 
-^ self subclassResponsibility 
+]
+
+{ #category : 'accessing' }
+JuLookAndFeel class >> default: aLookAndFeel [
+	default := aLookAndFeel
+]
+
+{ #category : 'testing' }
+JuLookAndFeel class >> isAbstract [
+	^ self == JuLookAndFeel
+]
+
+{ #category : 'drawing' }
+JuLookAndFeel >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos slider: aSlider [
+	"Answer a JuDrawing. The three positions are pixel coordinates along the slider's axis, not proportions."
+	^ self subclassResponsibility
+]
+
+{ #category : 'colors' }
+JuLookAndFeel >> findColour: anId [
+	^ colours at: anId ifAbsent: [ Color magenta ]
+
+]
+
+{ #category : 'initialization' }
+JuLookAndFeel >> initialiseColours [
+	self subclassResponsibility
+]
+
+{ #category : 'initialization' }
+JuLookAndFeel >> initialize [
+	super initialize.
+	colours := Dictionary new.
+	self initialiseColours
+]
+
+{ #category : 'colors' }
+JuLookAndFeel >> setColour: anId to: aColour [
+	colours at: anId put: aColour
 ]
