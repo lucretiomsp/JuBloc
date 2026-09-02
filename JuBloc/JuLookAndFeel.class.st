@@ -58,7 +58,7 @@ Class {
 	#tag : 'LookAndFeel'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'drawing' }
 JuLookAndFeel >> drawLinearSliderIn: aRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos slider: aSlider [
 
 ^ self subclassResponsibility 
