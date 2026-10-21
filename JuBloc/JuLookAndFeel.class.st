@@ -59,9 +59,8 @@ Class {
 	#classInstVars : [
 		'default'
 	],
-	#category : 'JuBloc-LookAndFeel',
-	#package : 'JuBloc',
-	#tag : 'LookAndFeel'
+	#category : 'JuBloc',
+	#package : 'JuBloc'
 }
 
 { #category : 'accessing' }
