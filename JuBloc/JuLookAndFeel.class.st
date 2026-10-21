@@ -50,14 +50,17 @@ Class {
 	#name : 'JuLookAndFeel',
 	#superclass : 'Object',
 	#instVars : [
-		'colours'
+		'colours',
+		'defaultSans',
+		'defaultSerif',
+		'defaultFixed',
+		'defaultTypeface'
 	],
 	#classInstVars : [
 		'default'
 	],
 	#category : 'JuBloc-LookAndFeel',
-	#package : 'JuBloc',
-	#tag : 'LookAndFeel'
+	#package : 'JuBloc-LookAndFeel'
 }
 
 { #category : 'accessing' }
@@ -78,7 +81,7 @@ JuLookAndFeel class >> isAbstract [
 
 { #category : 'drawing' }
 JuLookAndFeel >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos slider: aSlider [
-	"Answer a JuDrawing. The three positions are pixel coordinates along the slider's axis, not proportions."
+	"JUCE: drawLinearSlider. Answers a JuDrawing; positions are pixels along the slider's axis."
 	^ self subclassResponsibility
 ]
 
@@ -103,4 +106,16 @@ JuLookAndFeel >> initialize [
 { #category : 'colors' }
 JuLookAndFeel >> setColour: anId to: aColour [
 	colours at: anId put: aColour
+]
+
+{ #category : 'drawing' }
+JuLookAndFeel >> sliderLayoutFor: aSlider [
+	"JUCE: getSliderLayout. Answers a JuSliderLayout."
+	^ self subclassResponsibility
+]
+
+{ #category : 'drawing' }
+JuLookAndFeel >> sliderThumbDiameterFor: aSlider [
+	"JUCE: getSliderThumbRadius, which answers a diameter."
+	^ self subclassResponsibility
 ]

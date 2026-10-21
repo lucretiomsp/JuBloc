@@ -9,6 +9,11 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'geometry' }
+JuHorizontalOrientation >> alongAxis: aNumber [
+	^ aNumber @ 0
+]
+
 { #category : 'private' }
 JuHorizontalOrientation >> centreLineOf: aJuRectangle [
 	^ aJuRectangle top + (aJuRectangle height * 0.5)

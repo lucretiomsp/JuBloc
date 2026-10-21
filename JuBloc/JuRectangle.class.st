@@ -99,6 +99,13 @@ JuRectangle >> origin [
 ^ origin
 ]
 
+{ #category : 'geometry' }
+JuRectangle >> reduced: aDelta [
+	"JUCE: reduced (delta) and reduced (deltaX, deltaY). aDelta is a Number or a Point."
+	^ self class origin: origin + aDelta extent: extent - (aDelta * 2)
+
+]
+
 { #category : 'accessing' }
 JuRectangle >> right [ 
 ^ origin x + extent x
@@ -113,6 +120,12 @@ JuRectangle >> top [
 { #category : 'accessing' }
 JuRectangle >> width [ 
 ^ extent x 
+]
+
+{ #category : 'geometry' }
+JuRectangle >> withCentre: aPoint [
+	"JUCE: withCentre."
+	^ self class origin: aPoint - (extent / 2) extent: extent
 ]
 
 { #category : 'accessing' }

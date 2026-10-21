@@ -26,10 +26,17 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : 'JuSliderOrientation',
 	#superclass : 'Object',
-	#category : 'JuBloc-model',
+	#category : 'JuBloc-Model',
 	#package : 'JuBloc',
-	#tag : 'model'
+	#tag : 'Model'
 }
+
+{ #category : 'as yet unclassified' }
+JuSliderOrientation >> alongAxis: aNumber [
+	"A Point holding aNumber on my axis and zero across it."
+	^ self subclassResponsibility
+
+]
 
 { #category : 'geometry' }
 JuSliderOrientation >> crossExtentOf: aJRectangle [

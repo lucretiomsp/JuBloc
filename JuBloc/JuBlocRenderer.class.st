@@ -5,21 +5,47 @@ Class {
 	#name : 'JuBlocRenderer',
 	#superclass : 'Object',
 	#instVars : [
-		'element'
+		'canvas'
 	],
 	#category : 'JuBloc-Graphics',
 	#package : 'JuBloc',
 	#tag : 'Graphics'
 }
 
+{ #category : 'style' }
+JuBlocRenderer class >> endSelectors [
+	^ Dictionary newFrom: {
+		#butt -> #setCapButt.
+		#square -> #setCapSquare.
+		#rounded -> #setCapRound }
+]
+
+{ #category : 'style' }
+JuBlocRenderer class >> jointSelectors [
+	"PathStrokeType::JointStyle to Alexandrie. Both sit on Cairo: 1:1, nothing lost."
+	^ Dictionary newFrom: {
+		#mitered -> #setJoinMiter.
+		#curved -> #setJoinRound.
+		#beveled -> #setJoinBevel }
+]
+
 { #category : 'instance creation' }
-JuBlocRenderer class >> on: aBlElement [
-	^ self new initializeElement: aBlElement; yourself
+JuBlocRenderer class >> on: anAeCanvas [
+	^ self new
+		initializeCanvas: anAeCanvas;
+		yourself
+]
+
+{ #category : 'as yet unclassified' }
+JuBlocRenderer >> applyStyleOf: aStrokeType [
+	canvas
+		perform: (self class jointSelectors at: aStrokeType jointStyle);
+		perform: (self class endSelectors at: aStrokeType endStyle)
 ]
 
 { #category : 'initialization' }
-JuBlocRenderer >> initializeElement: aBlElement [
-	element := aBlElement
+JuBlocRenderer >> initializeCanvas: anAeCanvas [
+	canvas := anAeCanvas
 ]
 
 { #category : 'visiting' }
@@ -30,26 +56,17 @@ JuBlocRenderer >> visitDrawing: aDrawing [
 
 { #category : 'visiting' }
 JuBlocRenderer >> visitFillEllipse: anOperation [
-	element addChild: (BlElement new
-		geometry: BlEllipseGeometry new;
-		background: anOperation colour;
-		position: anOperation bounds origin;
-		size: anOperation bounds extent;
-		yourself)
-]
-
-{ #category : 'visiting' }
-JuBlocRenderer >> visitStrokeLine: anOperation [
-	| half origin extent |
-	half := anOperation width / 2.
-	origin := (anOperation from x min: anOperation to x) - half
-		@ ((anOperation from y min: anOperation to y) - half).
-	extent := ((anOperation from x - anOperation to x) abs + anOperation width)
-		@ ((anOperation from y - anOperation to y) abs + anOperation width).
-	element addChild: (BlElement new
-		geometry: (BlRoundedRectangleGeometry cornerRadius: half);
-		background: anOperation colour;
-		position: origin;
-		size: extent;
-		yourself)
+	"Graphics::fillEllipse. Circles only, which is all V4 fills."
+	| bounds |
+	bounds := anOperation bounds.
+	self assert: bounds width = bounds height description: 'Only circles are rendered so far'.
+	canvas pathFactory: [ :aCairoContext |
+		aCairoContext
+			arcCenter: bounds centre
+			radius: bounds width / 2
+			startAngle: 0
+			endAngle: Float twoPi ].
+	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
+	canvas setBorderOff.
+	canvas drawFigure
 ]

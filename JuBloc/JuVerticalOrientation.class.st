@@ -9,6 +9,11 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'geometry' }
+JuVerticalOrientation >> alongAxis: aNumber [
+	^ 0 @ aNumber
+]
+
 { #category : 'testing' }
 JuVerticalOrientation >> centreLineOf: aJuRectangle [
 	^ aJuRectangle left + (aJuRectangle width * 0.5)
