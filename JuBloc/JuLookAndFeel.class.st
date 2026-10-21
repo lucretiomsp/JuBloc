@@ -60,7 +60,8 @@ Class {
 		'default'
 	],
 	#category : 'JuBloc-LookAndFeel',
-	#package : 'JuBloc-LookAndFeel'
+	#package : 'JuBloc',
+	#tag : 'LookAndFeel'
 }
 
 { #category : 'accessing' }

@@ -7,31 +7,42 @@ My text box is a child BlTextElement. In JUCE it is a Label built by createSlide
 "
 Class {
 	#name : 'JuSlider',
-	#superclass : 'BlElement',
+	#superclass : 'JuComponent',
 	#instVars : [
-		'value',
-		'minimum',
-		'maximum',
 		'style',
-		'lookAndFeel',
-		'colours',
-		'textBoxWidth',
-		'textElement'
+		'range',
+		'value',
+		'onValueChange'
 	],
-	#category : 'JuBloc-widgets',
+	#category : 'JuBloc-Slider',
 	#package : 'JuBloc',
-	#tag : 'widgets'
+	#tag : 'Slider'
 }
 
 { #category : 'examples' }
 JuSlider class >> linearHorizontal [
-	^ self new style: JuSliderStyle linearHorizontal; yourself
-
+	"JUCE: Slider (Slider::LinearHorizontal, Slider::NoTextBox)."
+	^ self new
+		style: JuSliderStyle linearHorizontal;
+		yourself
 ]
 
 { #category : 'examples' }
 JuSlider class >> linearVertical [
 	^ self new style: JuSliderStyle linearVertical; yourself
+]
+
+{ #category : 'defaults' }
+JuSlider >> defaultExtent [
+	"A juce::Slider starts at 0 x 0 and its parent sizes it. Preview only: the export writes measured bounds."
+	^ 200 @ 24
+]
+
+{ #category : 'event handling' }
+JuSlider >> dragTo: aPoint [
+	"JUCE: Pimpl::handleAbsoluteDrag, linear slider snapping to the mouse (its default)."
+	self value: (self proportionOfLengthToValue:
+		(self orientation fractionFor: aPoint in: self sliderBounds))
 ]
 
 { #category : 'drawing' }
@@ -68,20 +79,13 @@ JuSlider >> handleMouseAt: aPoint [
 
 { #category : 'initialization' }
 JuSlider >> initialize [
+	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0."
 	super initialize.
-	minimum := 0.0.
-	maximum := 1.0.
-	value := 0.5.
 	style := JuSliderStyle linearHorizontal.
-	lookAndFeel := JuLookAndFeel default.
-	colours := Dictionary new.
-	textBoxWidth := 60.
-	self size: 260 @ 24.
-	self background: (Color fromHexString: '323e44').
-	self initializeTextElement.
-	self initializeDragHandler.
-	self rebuild
-
+	range := JuNormalisableRange start: 0 end: 10.
+	value := 0.
+	onValueChange := [ ].
+	self size: self defaultExtent
 
 ]
 
@@ -102,6 +106,42 @@ JuSlider >> initializeTextElement [
 { #category : 'accessing' }
 JuSlider >> minimum: aNumber maximum: anotherNumber [
 	minimum := aNumber. maximum := anotherNumber. self rebuild
+]
+
+{ #category : 'event handling' }
+JuSlider >> mouseDown: aBlMouseEvent [
+	"JUCE: Pimpl::mouseDown, which ends by calling mouseDrag."
+	self mouseDrag: aBlMouseEvent
+]
+
+{ #category : 'event handling' }
+JuSlider >> mouseDrag: aBlMouseEvent [
+	self dragTo: aBlMouseEvent localPosition
+
+]
+
+{ #category : 'accessing' }
+JuSlider >> onValueChange: aBlock [
+	"JUCE: onValueChange. aBlock takes no argument, or the slider."
+	onValueChange := aBlock
+]
+
+{ #category : 'accessing' }
+JuSlider >> orientation [ 
+ ^ style orientation
+]
+
+{ #category : 'accessing' }
+JuSlider >> range [ 
+^ range
+]
+
+{ #category : 'accessing' }
+JuSlider >> range: aNormalisableRange [
+	"JUCE: setNormalisableRange. Re-snaps the value without notifying, as updateRange does."
+	range := aNormalisableRange.
+	value := range snapToLegalValue: value.
+	self invalidate
 ]
 
 { #category : 'drawing' }
@@ -129,10 +169,10 @@ JuSlider >> style [
 ]
 
 { #category : 'accessing' }
-JuSlider >> style: aStyle [ 
-
-style := aStyle.
-self rebuild
+JuSlider >> style: aSliderStyle [
+	"JUCE: setSliderStyle."
+	style := aSliderStyle.
+	self invalidate
 ]
 
 { #category : 'accessing' }
@@ -142,9 +182,13 @@ JuSlider >> value [
 
 { #category : 'accessing' }
 JuSlider >> value: aNumber [
-
-value := (aNumber max: minimum) min: maximum.
-	self rebuild
+	"JUCE: setValue. Always synchronous: Bloc has one UI process."
+	| newValue |
+	newValue := range snapToLegalValue: aNumber.
+	(newValue closeTo: value) ifTrue: [ ^ self ].
+	value := newValue.
+	self invalidate.
+	onValueChange cull: self
 ]
 
 { #category : 'drawing' }

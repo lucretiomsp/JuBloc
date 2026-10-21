@@ -68,7 +68,7 @@ JuLookAndFeelV4 >> initialiseColours [
 	self setColour: #sliderTextBoxText to: Color white
 ]
 
-{ #category : 'drawing' }
+{ #category : 'private' }
 JuLookAndFeelV4 >> lineFrom: aPoint to: anotherPoint [
 	"JUCE: Path p; p.startNewSubPath (a); p.lineTo (b);"
 	^ JuPath new
@@ -77,7 +77,7 @@ JuLookAndFeelV4 >> lineFrom: aPoint to: anotherPoint [
 		yourself
 ]
 
-{ #category : 'drawing' }
+{ #category : 'layout' }
 JuLookAndFeelV4 >> sliderLayoutFor: aSlider [
 	"JUCE: LookAndFeel_V2::getSliderLayout, inherited by V4. NoTextBox branch: JuBloc has no text box yet."
 	^ JuSliderLayout

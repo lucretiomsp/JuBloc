@@ -24,6 +24,7 @@ JuSliderLayout class >> sliderBounds: aJuRectangle textBoxBounds: anotherJuRecta
 JuSliderLayout >> initializeSliderBounds: aJuRectangle textBoxBounds: anotherJuRectangle [
 	sliderBounds := aJuRectangle.
 	textBoxBounds := anotherJuRectangle
+
 ]
 
 { #category : 'initialization' }
