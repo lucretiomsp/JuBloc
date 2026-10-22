@@ -17,13 +17,11 @@ JuComponent >> aeDrawOn: anAeCanvas [
 	self paint acceptVisitor: (JuBlocRenderer on: anAeCanvas)
 ]
 
-{ #category : 'initialization' }
+{ #category : 'colors' }
 JuComponent >> findColour: aColourId [
-	"JUCE's default, inheritFromParent = false: my own colour, else my look and feel's."
 	^ colours
 		at: aColourId
 		ifAbsent: [ self lookAndFeel findColour: aColourId ]
-
 ]
 
 { #category : 'initialization' }

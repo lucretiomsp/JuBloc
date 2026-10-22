@@ -72,7 +72,7 @@ JuLookAndFeelV4Test >> testThumbIsCentredOnTheSliderPos [
 	| thumb |
 	thumb := drawing operations third bounds.
 	self
-		assert: thumb centre equals: 100 @ 12;
+		assert: thumb center equals: 100 @ 12;
 		assert: thumb extent equals: 12 @ 12
 
 ]

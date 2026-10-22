@@ -73,7 +73,7 @@ JuPathStrokeType >> initializeStrokeThickness: aThickness jointStyle: aJointStyl
 ]
 
 { #category : 'initialization' }
-JuPathStrokeType >> joinStyle [ 
+JuPathStrokeType >> jointStyle [ 
 ^ jointStyle 
 ]
 

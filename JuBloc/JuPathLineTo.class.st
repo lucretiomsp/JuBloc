@@ -13,7 +13,7 @@ Class {
 JuPathLineTo class >> point: aPoint [
 	^ self new
 		initializePoint: aPoint;
-		yourselfs
+		yourself
 ]
 
 { #category : 'accessing' }

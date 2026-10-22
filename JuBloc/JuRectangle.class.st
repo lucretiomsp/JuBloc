@@ -114,8 +114,7 @@ JuRectangle >> right [
 
 { #category : 'accessing' }
 JuRectangle >> top [
-
-	^ extent y
+	^ origin y
 ]
 
 { #category : 'accessing' }

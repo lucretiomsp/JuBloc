@@ -45,67 +45,16 @@ JuSlider >> dragTo: aPoint [
 		(self orientation fractionFor: aPoint in: self sliderBounds))
 ]
 
-{ #category : 'drawing' }
-JuSlider >> drawing [
-
-	| dBounds |
-	dBounds := self drawingBounds.
-	^ lookAndFeel
-		  drawLinearSliderIn: dBounds
-		  sliderPos: self sliderPos
-		  minSliderPos: (style orientation positionFor: 0 in: dBounds)
-		  maxSliderPos: (style orientation positionFor: 1 in: dBounds)
-		  slider: self
-]
-
-{ #category : 'drawing' }
-JuSlider >> drawingBounds [
-	"JUCE's getSliderLayout: my area with the text box removed."
-	^ (JuRectangle origin: 0 @ 0 extent: self extent) withTrimmedLeft: textBoxWidth
-
-]
-
-{ #category : 'colors' }
-JuSlider >> findColour: anId [
-	^ colours at: anId ifAbsent: [ lookAndFeel findColour: anId ]
-]
-
-{ #category : 'event handling' }
-JuSlider >> handleMouseAt: aPoint [
-	| fraction |
-	fraction := style orientation fractionFor: aPoint in: self drawingBounds.
-	self value: minimum + (fraction * (maximum - minimum))
-]
-
 { #category : 'initialization' }
 JuSlider >> initialize [
 	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0."
+
 	super initialize.
 	style := JuSliderStyle linearHorizontal.
 	range := JuNormalisableRange start: 0 end: 10.
 	value := 0.
 	onValueChange := [ ].
-	self size: self defaultExtent
-
-]
-
-{ #category : 'initialization' }
-JuSlider >> initializeDragHandler [
-	self addEventHandlerOn: BlMouseDownEvent do: [ :anEvent | self handleMouseAt: anEvent localPosition ].
-	self addEventHandlerOn: BlMouseMoveEvent do: [ :anEvent |
-		anEvent isPrimaryButtonPressed ifTrue: [ self handleMouseAt: anEvent localPosition ] ]
-]
-
-{ #category : 'initialization' }
-JuSlider >> initializeTextElement [
-	textElement := BlTextElement new
-		position: 4 @ 4;
-		yourself
-]
-
-{ #category : 'accessing' }
-JuSlider >> minimum: aNumber maximum: anotherNumber [
-	minimum := aNumber. maximum := anotherNumber. self rebuild
+	self extent: self defaultExtent
 ]
 
 { #category : 'event handling' }
@@ -144,25 +93,6 @@ JuSlider >> range: aNormalisableRange [
 	self invalidate
 ]
 
-{ #category : 'drawing' }
-JuSlider >> rebuild [
-	self removeChildren.
-	self drawing acceptVisitor: (JuBlocRenderer on: self).
-	textElement text: (value printShowingDecimalPlaces: 2) asRopedText.
-	self addChild: textElement
-]
-
-{ #category : 'colors' }
-JuSlider >> setColour: anId to: aColour [
-	colours at: anId put: aColour.
-	self rebuild
-]
-
-{ #category : 'drawing' }
-JuSlider >> sliderPos [
-	^ style orientation positionFor: self valueProportion in: self drawingBounds
-]
-
 { #category : 'accessing' }
 JuSlider >> style [ 
 ^ style
@@ -189,9 +119,4 @@ JuSlider >> value: aNumber [
 	value := newValue.
 	self invalidate.
 	onValueChange cull: self
-]
-
-{ #category : 'drawing' }
-JuSlider >> valueProportion [
-	^ (value - minimum) / (maximum - minimum)
 ]

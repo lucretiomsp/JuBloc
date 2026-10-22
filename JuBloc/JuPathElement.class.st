@@ -33,3 +33,12 @@ JuPathElement >> arguments [
 JuPathElement >> hash [
 	^ self class hash bitXor: self arguments hash
 ]
+
+{ #category : 'printing' }
+JuPathElement >> printOn: aStream [
+	"Shows my arguments, so a failing comparison says what differs."
+	aStream
+		nextPutAll: self class name;
+		space;
+		print: self arguments
+]

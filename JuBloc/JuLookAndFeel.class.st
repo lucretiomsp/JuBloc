@@ -72,6 +72,7 @@ JuLookAndFeel class >> default [
 
 { #category : 'accessing' }
 JuLookAndFeel class >> default: aLookAndFeel [
+"JUCE: setDefaultLookAndFeel. nil brings back a fresh V4 on the next default."
 	default := aLookAndFeel
 ]
 
