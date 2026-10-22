@@ -12,7 +12,16 @@ Class {
 	#tag : 'LookAndFeel'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'colors' }
+JuLookAndFeelV4 class >> colourScheme: aColourScheme [
+	"JUCE: LookAndFeel_V4 (ColourScheme)."
+	^ self new
+		setColourScheme: aColourScheme;
+		yourself
+
+]
+
+{ #category : 'colors' }
 JuLookAndFeelV4 >> colourTable [
 	"LookAndFeel_V4::initialiseColours, rows ported so far."
 	| scheme |
@@ -31,6 +40,12 @@ JuLookAndFeelV4 >> colourTable [
 		#labelBackground.           Color transparent.
 		#labelOutline.              Color transparent.
 		#resizableWindowBackground. (scheme getUIColour: #windowBackground) }
+]
+
+{ #category : 'colors' }
+JuLookAndFeelV4 >> currentColourScheme [
+	"JUCE: getCurrentColourScheme."
+	^ currentColourScheme
 ]
 
 { #category : 'drawing' }
@@ -59,13 +74,18 @@ JuLookAndFeelV4 >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSlid
 			colour: (aSlider findColour: #sliderThumb) }
 ]
 
-{ #category : 'initialization' }
+{ #category : 'colors' }
 JuLookAndFeelV4 >> initialiseColours [
-	"JUCE's dark scheme. The filled track really is darker than the background."
-	self setColour: #sliderBackground to: (Color fromHexString: '263238').
-	self setColour: #sliderTrack      to: (Color fromHexString: '181f22').
-	self setColour: #sliderThumb      to: (Color fromHexString: '42a2c8').
-	self setColour: #sliderTextBoxText to: Color white
+	"JUCE: initialiseColours. The rows live in colourTable, as I gave it in the slider message."
+	self colourTable pairsDo: [ :colourId :colour | self setColour: colourId to: colour ]
+]
+
+{ #category : 'colors' }
+JuLookAndFeelV4 >> initialize [
+	"JUCE: LookAndFeel_V4 (): the dark scheme, then initialiseColours."
+	super initialize.
+	currentColourScheme := JuColourScheme dark.
+	self initialiseColours
 ]
 
 { #category : 'private' }
@@ -75,6 +95,14 @@ JuLookAndFeelV4 >> lineFrom: aPoint to: anotherPoint [
 		startNewSubPath: aPoint;
 		lineTo: anotherPoint;
 		yourself
+]
+
+{ #category : 'colors' }
+JuLookAndFeelV4 >> setColourScheme: aColourScheme [
+	"JUCE: setColourScheme. Every colour is rebuilt from the new scheme."
+	currentColourScheme := aColourScheme.
+	self initialiseColours
+
 ]
 
 { #category : 'layout' }

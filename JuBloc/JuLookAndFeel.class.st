@@ -59,8 +59,9 @@ Class {
 	#classInstVars : [
 		'default'
 	],
-	#category : 'JuBloc',
-	#package : 'JuBloc'
+	#category : 'JuBloc-LookAndFeel',
+	#package : 'JuBloc',
+	#tag : 'LookAndFeel'
 }
 
 { #category : 'accessing' }
@@ -86,9 +87,9 @@ JuLookAndFeel >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSlider
 ]
 
 { #category : 'colors' }
-JuLookAndFeel >> findColour: anId [
-	^ colours at: anId ifAbsent: [ Color magenta ]
-
+JuLookAndFeel >> findColour: aColourId [
+	"JUCE: LookAndFeel::findColour."
+	^ colours at: aColourId ifAbsent: [ self missingColour: aColourId ]
 ]
 
 { #category : 'initialization' }
@@ -98,14 +99,21 @@ JuLookAndFeel >> initialiseColours [
 
 { #category : 'initialization' }
 JuLookAndFeel >> initialize [
+	"Registry only. JuLookAndFeelV4 fills it after setting its scheme."
 	super initialize.
-	colours := Dictionary new.
-	self initialiseColours
+	colours := Dictionary new
 ]
 
 { #category : 'colors' }
-JuLookAndFeel >> setColour: anId to: aColour [
-	colours at: anId put: aColour
+JuLookAndFeel >> missingColour: aColourId [
+	"JUCE: jassertfalse, then black."
+	JuMissingColour signalColourId: aColourId.
+	^ Color black
+]
+
+{ #category : 'colors' }
+JuLookAndFeel >> setColour: aColourId to: aColour [
+	colours at: aColourId put: aColour
 ]
 
 { #category : 'drawing' }

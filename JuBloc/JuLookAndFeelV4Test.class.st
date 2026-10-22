@@ -46,6 +46,27 @@ JuLookAndFeelV4Test >> testColoursResolveThroughTheSlider [
 		assert: drawing operations third colour equals: (slider findColour: #sliderThumb)
 ]
 
+{ #category : 'tests' }
+JuLookAndFeelV4Test >> testMissingColourIsResumableBlack [
+	| lookAndFeel |
+	lookAndFeel := JuLookAndFeelV4 new.
+	self should: [ lookAndFeel findColour: #noSuchColour ] raise: JuMissingColour.
+	self
+		assert: ([ lookAndFeel findColour: #noSuchColour ] on: JuMissingColour do: [ :warning | warning resume ])
+		equals: Color black
+]
+
+{ #category : 'tests' }
+JuLookAndFeelV4Test >> testSchemeFeedsTheSliderColours [
+	| scheme lookAndFeel |
+	scheme := JuColourScheme light.
+	lookAndFeel := JuLookAndFeelV4 colourScheme: scheme.
+	self
+		assert: (lookAndFeel findColour: #sliderBackground) equals: (scheme getUIColour: #widgetBackground);
+		assert: (lookAndFeel findColour: #sliderThumb) equals: (scheme getUIColour: #defaultFill);
+		assert: (lookAndFeel findColour: #sliderTrack) equals: (scheme getUIColour: #highlightedFill)
+]
+
 { #category : 'running' }
 JuLookAndFeelV4Test >> testThumbIsCentredOnTheSliderPos [
 	| thumb |
