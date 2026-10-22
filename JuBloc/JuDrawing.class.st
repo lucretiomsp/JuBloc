@@ -19,6 +19,12 @@ JuDrawing class >> withAll: aCollection [
 		yourself
 ]
 
+{ #category : 'visiting' }
+JuDrawing >> acceptVisitor: aVisitor [
+	"Composite: a drawing is itself an operation, so drawings nest and the visitor needs no special case."
+	^ aVisitor visitDrawing: self
+]
+
 { #category : 'initialization' }
 JuDrawing >> initializeOperations: aCollection [
 	operations := aCollection asArray

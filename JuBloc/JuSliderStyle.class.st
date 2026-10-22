@@ -12,13 +12,15 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'as yet unclassified' }
-JuSliderStyle class >> inearHorizontal [
-	^ self new initializeOrientation: JuHorizontalOrientation new; yourself
-
+{ #category : 'instance creation' }
+JuSliderStyle class >> linearHorizontal [
+"JUCE: Slider::LinearHorizontal."
+	^ self new
+		initializeOrientation: JuHorizontalOrientation new;
+		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'instance creation' }
 JuSliderStyle class >> linearVertical [
 	^ self new initializeOrientation: JuVerticalOrientation new; yourself
 ]

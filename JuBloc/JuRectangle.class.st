@@ -61,9 +61,10 @@ JuRectangle >> bottom [
 ]
 
 { #category : 'accessing' }
-JuRectangle >> center [  
- 
-^ origin + (extent / 2)
+JuRectangle >> center [
+	"JUCE: getCentre. Derived, so it emits as arithmetic. Exact division is right:
+	 V4 only asks float rectangles for their centre."
+	^ origin + (extent / 2)
 ]
 
 { #category : 'accessing' }
