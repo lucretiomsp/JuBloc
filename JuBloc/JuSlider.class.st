@@ -57,6 +57,14 @@ JuSlider >> initialize [
 	self extent: self defaultExtent
 ]
 
+{ #category : 'as yet unclassified' }
+JuSlider >> linearSliderPosFor: aValue [
+	"JUCE: Pimpl::getLinearSliderPos."
+	^ self orientation
+		positionFor: (self valueToProportionOfLength: aValue)
+		in: self sliderBounds
+]
+
 { #category : 'event handling' }
 JuSlider >> mouseDown: aBlMouseEvent [
 	"JUCE: Pimpl::mouseDown, which ends by calling mouseDrag."
@@ -80,6 +88,11 @@ JuSlider >> orientation [
  ^ style orientation
 ]
 
+{ #category : 'as yet unclassified' }
+JuSlider >> proportionOfLengthToValue: aProportion [
+	^ range convertFrom0to1: aProportion
+]
+
 { #category : 'accessing' }
 JuSlider >> range [ 
 ^ range
@@ -91,6 +104,12 @@ JuSlider >> range: aNormalisableRange [
 	range := aNormalisableRange.
 	value := range snapToLegalValue: value.
 	self invalidate
+]
+
+{ #category : 'initialization' }
+JuSlider >> sliderBounds [
+	"JUCE: Pimpl::sliderRect, cached in resized. Recomputed here, so never stale."
+	^ (self lookAndFeel sliderLayoutFor: self) sliderBounds
 ]
 
 { #category : 'accessing' }
@@ -119,4 +138,10 @@ JuSlider >> value: aNumber [
 	value := newValue.
 	self invalidate.
 	onValueChange cull: self
+]
+
+{ #category : 'as yet unclassified' }
+JuSlider >> valueToProportionOfLength: aValue [
+	"JUCE: valueToProportionOfLength, virtual there too."
+	^ range convertTo0to1: aValue
 ]
