@@ -26,18 +26,6 @@ JuPathAddCentredArc >> acceptVisitor: aVisitor [
 	^ aVisitor visitPathAddCentredArc: self
 ]
 
-{ #category : 'adding' }
-JuPathAddCentredArc >> addCentredArc: aCenter radii: aRadiiPoint rotation: aRotation from: fromAngle to: toAngle startAsNewSubPath: aBoolean [
-	"JUCE: Path::addCentredArc. Angles in radians, clockwise from 12 o'clock."
-	elements add: (JuPathAddCentredArc
-		center: aCenter
-		radii: aRadiiPoint
-		rotation: aRotation
-		from: fromAngle
-		to: toAngle
-		startAsNewSubPath: aBoolean)
-]
-
 { #category : 'accessing' }
 JuPathAddCentredArc >> arguments [
 	"Path::addCentredArc (centreX, centreY, radiusX, radiusY, rotation, from, to, startAsNewSubPath), pairs as Points."

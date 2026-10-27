@@ -22,8 +22,9 @@ JuPathStartNewSubPath >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-JuPathStartNewSubPath >> arguments [ 
-^ point
+JuPathStartNewSubPath >> arguments [
+
+	^ { point }
 ]
 
 { #category : 'initialization' }

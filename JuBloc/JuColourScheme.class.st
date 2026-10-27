@@ -80,6 +80,7 @@ JuColourScheme >> = anObject [
 JuColourScheme >> getUIColour: aRole [
 	"JUCE: getUIColour. An unknown role is a typo, so KeyNotFound says so (JUCE asserts)."
 	^ palette at: aRole
+
 ]
 
 { #category : 'comparing' }

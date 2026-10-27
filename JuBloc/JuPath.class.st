@@ -2,13 +2,7 @@ Class {
 	#name : 'JuPath',
 	#superclass : 'Object',
 	#instVars : [
-		'elements',
-		'center',
-		'radii',
-		'rotation',
-		'fromAngle',
-		'toAngle',
-		'startAsNewSubPath'
+		'elements'
 	],
 	#category : 'JuBloc-Graphics',
 	#package : 'JuBloc',

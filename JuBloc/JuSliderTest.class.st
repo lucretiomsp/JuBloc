@@ -179,6 +179,7 @@ JuSliderTest >> testVerticalRunsBottomToTop [
 		assert: vertical sliderBounds extent equals: 24 @ 176;
 		assert: (vertical linearSliderPosFor: 0) equals: 188;
 		assert: (vertical linearSliderPosFor: 10) equals: 12.
+	vertical startDragAt: 3 @ 100.
 	vertical dragTo: 3 @ 100.
 	self assert: vertical value equals: 5
 ]

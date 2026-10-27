@@ -22,11 +22,6 @@ JuFillRect >> acceptVisitor: aVisitor [
 	^ aVisitor visitFillRect: self
 ]
 
-{ #category : 'as yet unclassified' }
-JuFillRect >> bound [ 
-^ bounds
-]
-
 { #category : 'accessing' }
 JuFillRect >> bounds [
 	^ bounds

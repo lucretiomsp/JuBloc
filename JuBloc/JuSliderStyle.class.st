@@ -26,9 +26,6 @@ Implementation Points.
 Class {
 	#name : 'JuSliderStyle',
 	#superclass : 'Object',
-	#instVars : [
-		'orientation'
-	],
 	#category : 'JuBloc-Model',
 	#package : 'JuBloc',
 	#tag : 'Model'
@@ -76,11 +73,6 @@ JuSliderStyle >> dragStartingAt: aPoint for: aSlider [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'initialization' }
-JuSliderStyle >> initializeOrientation: anOrientation [
-	orientation := anOrientation
-]
-
 { #category : 'testing' }
 JuSliderStyle >> isBar [
 	"JUCE: Slider::isBar."
@@ -88,19 +80,9 @@ JuSliderStyle >> isBar [
 ]
 
 { #category : 'testing' }
-JuSliderStyle >> isHorizontal [ 
-^ orientation isHorizontal 
-]
-
-{ #category : 'testing' }
 JuSliderStyle >> isRotary [
 	"JUCE: Slider::isRotary."
 	^ false
-]
-
-{ #category : 'accessing' }
-JuSliderStyle >> orientation [ 
-^ orientation 
 ]
 
 { #category : 'accessing' }

@@ -1,6 +1,9 @@
 Class {
 	#name : 'JuLinearSliderStyle',
 	#superclass : 'JuSliderStyle',
+	#instVars : [
+		'orientation'
+	],
 	#category : 'JuBloc-Model',
 	#package : 'JuBloc',
 	#tag : 'Model'
