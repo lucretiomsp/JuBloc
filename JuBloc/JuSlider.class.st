@@ -13,7 +13,8 @@ Class {
 		'range',
 		'value',
 		'onValueChange',
-		'orientation'
+		'rotaryParameters',
+		'drag'
 	],
 	#category : 'JuBloc-Slider',
 	#package : 'JuBloc',

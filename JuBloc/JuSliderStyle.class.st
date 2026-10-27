@@ -13,21 +13,45 @@ Class {
 }
 
 { #category : 'instance creation' }
+JuSliderStyle class >> linearBar [
+	"JUCE: Slider::LinearBar."
+	^ JuLinearBarSliderStyle orientation: JuHorizontalOrientation new
+]
+
+{ #category : 'instance creation' }
+JuSliderStyle class >> linearBarVertical [
+	"JUCE: Slider::LinearBarVertical."
+	^ JuLinearBarSliderStyle orientation: JuVerticalOrientation new
+]
+
+{ #category : 'instance creation' }
 JuSliderStyle class >> linearHorizontal [
-"JUCE: Slider::LinearHorizontal."
-	^ self new
-		initializeOrientation: JuHorizontalOrientation new;
-		yourself
+	"JUCE: Slider::LinearHorizontal."
+	^ JuLinearSliderStyle orientation: JuHorizontalOrientation new
 ]
 
 { #category : 'instance creation' }
 JuSliderStyle class >> linearVertical [
-	^ self new initializeOrientation: JuVerticalOrientation new; yourself
+	"JUCE: Slider::LinearVertical."
+	^ JuLinearSliderStyle orientation: JuVerticalOrientation new
 ]
 
-{ #category : 'defaults' }
+{ #category : 'instance creation' }
+JuSliderStyle class >> rotaryHorizontalVerticalDrag [
+	"JUCE: Slider::RotaryHorizontalVerticalDrag, the usual knob."
+	^ JuRotarySliderStyle new
+]
+
+{ #category : 'accessing' }
 JuSliderStyle >> defaultExtent [
-	^ orientation defaultExtent
+	"The preview's starting size. A juce::Slider starts at 0 x 0 and its parent sizes it."
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+JuSliderStyle >> dragStartingAt: aPoint for: aSlider [
+	"Answer the JuSliderDrag for a gesture starting at aPoint."
+	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
@@ -36,11 +60,29 @@ JuSliderStyle >> initializeOrientation: anOrientation [
 ]
 
 { #category : 'testing' }
+JuSliderStyle >> isBar [
+	"JUCE: Slider::isBar."
+	^ false
+]
+
+{ #category : 'testing' }
 JuSliderStyle >> isHorizontal [ 
 ^ orientation isHorizontal 
+]
+
+{ #category : 'testing' }
+JuSliderStyle >> isRotary [
+	"JUCE: Slider::isRotary."
+	^ false
 ]
 
 { #category : 'accessing' }
 JuSliderStyle >> orientation [ 
 ^ orientation 
+]
+
+{ #category : 'accessing' }
+JuSliderStyle >> paint: aSlider [
+	"JUCE: Slider::Pimpl::paint, which asks the look and feel for a linear or a rotary drawing."
+	^ self subclassResponsibility
 ]
