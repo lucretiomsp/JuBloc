@@ -45,6 +45,12 @@ JuSliderOrientation >> crossExtentOf: aJRectangle [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'accessing' }
+JuSliderOrientation >> defaultExtent [
+	"The preview's starting size. A juce::Slider starts at 0 x 0 and its parent sizes it."
+	^ self subclassResponsibility
+]
+
 { #category : 'converting' }
 JuSliderOrientation >> fractionFor: aPoint in: aJuRectangle [
 	"Pixel space to value space, clamped. Dragging uses this. Inverse of positionFor:in:."

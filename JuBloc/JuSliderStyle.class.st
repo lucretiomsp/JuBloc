@@ -25,6 +25,11 @@ JuSliderStyle class >> linearVertical [
 	^ self new initializeOrientation: JuVerticalOrientation new; yourself
 ]
 
+{ #category : 'defaults' }
+JuSliderStyle >> defaultExtent [
+	^ orientation defaultExtent
+]
+
 { #category : 'initialization' }
 JuSliderStyle >> initializeOrientation: anOrientation [
 	orientation := anOrientation

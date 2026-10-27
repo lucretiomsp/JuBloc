@@ -25,6 +25,11 @@ JuVerticalOrientation >> crossExtentOf: aJuRectangle [
 
 ]
 
+{ #category : 'defaults' }
+JuVerticalOrientation >> defaultExtent [
+	^ 24 @ 200
+]
+
 { #category : 'testing' }
 JuVerticalOrientation >> fractionFor: aPoint in: aJuRectangle [
 	^ (((aJuRectangle bottom - aPoint y) / aJuRectangle height) max: 0.0) min: 1.0
@@ -39,6 +44,12 @@ JuVerticalOrientation >> isHorizontal [
 { #category : 'testing' }
 JuVerticalOrientation >> pointAt: aPosition in: aJuRectangle [
 	^ (self centreLineOf: aJuRectangle) @ aPosition
+]
+
+{ #category : 'converting' }
+JuVerticalOrientation >> positionFor: aFraction in: aJuRectangle [
+	"Value space to pixel space: 0 at the bottom, 1 at the top."
+	^ aJuRectangle bottom - (aFraction * aJuRectangle height)
 ]
 
 { #category : 'testing' }

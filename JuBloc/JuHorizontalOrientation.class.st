@@ -25,6 +25,11 @@ JuHorizontalOrientation >> crossExtentOf: aJuRectangle [
 
 ]
 
+{ #category : 'accessing' }
+JuHorizontalOrientation >> defaultExtent [
+	^ 200 @ 24
+]
+
 { #category : 'geometry' }
 JuHorizontalOrientation >> fractionFor: aPoint in: aJuRectangle [
 	^ (((aPoint x - aJuRectangle left) / aJuRectangle width) max: 0.0) min: 1.0

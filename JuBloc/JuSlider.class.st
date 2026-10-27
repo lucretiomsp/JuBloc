@@ -12,7 +12,8 @@ Class {
 		'style',
 		'range',
 		'value',
-		'onValueChange'
+		'onValueChange',
+		'orientation'
 	],
 	#category : 'JuBloc-Slider',
 	#package : 'JuBloc',
@@ -22,20 +23,22 @@ Class {
 { #category : 'examples' }
 JuSlider class >> linearHorizontal [
 	"JUCE: Slider (Slider::LinearHorizontal, Slider::NoTextBox)."
-	^ self new
-		style: JuSliderStyle linearHorizontal;
-		yourself
+	^ self style: JuSliderStyle linearHorizontal
 ]
 
 { #category : 'examples' }
 JuSlider class >> linearVertical [
-	^ self new style: JuSliderStyle linearVertical; yourself
+	"JUCE: Slider (Slider::LinearVertical, Slider::NoTextBox)."
+	^ self style: JuSliderStyle linearVertical
 ]
 
-{ #category : 'defaults' }
-JuSlider >> defaultExtent [
-	"A juce::Slider starts at 0 x 0 and its parent sizes it. Preview only: the export writes measured bounds."
-	^ 200 @ 24
+{ #category : 'accessing' }
+JuSlider class >> style: aSliderStyle [
+	"JUCE: Slider (style, NoTextBox), sized for the preview."
+	^ self new
+		style: aSliderStyle;
+		extent: aSliderStyle defaultExtent;
+		yourself
 ]
 
 { #category : 'event handling' }
@@ -47,14 +50,13 @@ JuSlider >> dragTo: aPoint [
 
 { #category : 'initialization' }
 JuSlider >> initialize [
-	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0."
-
+	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0, size 0 x 0 (the parent sizes it).
+	 The constructors give the preview its size, from the style."
 	super initialize.
 	style := JuSliderStyle linearHorizontal.
 	range := JuNormalisableRange start: 0 end: 10.
 	value := 0.
-	onValueChange := [ ].
-	self extent: self defaultExtent
+	onValueChange := [ ]
 ]
 
 { #category : 'helpers' }

@@ -104,3 +104,17 @@ JuSliderTest >> testValueSnapsToTheInterval [
 	slider value: 3.4.
 	self assert: slider value equals: 3
 ]
+
+{ #category : 'tests' }
+JuSliderTest >> testVerticalRunsBottomToTop [
+	| vertical |
+	vertical := JuSlider linearVertical.
+	vertical forceLayout.
+	self
+		assert: vertical sliderBounds origin equals: 0 @ 12;
+		assert: vertical sliderBounds extent equals: 24 @ 176;
+		assert: (vertical linearSliderPosFor: 0) equals: 188;
+		assert: (vertical linearSliderPosFor: 10) equals: 12.
+	vertical dragTo: 3 @ 100.
+	self assert: vertical value equals: 5
+]
