@@ -21,6 +21,17 @@ JuLookAndFeelV4Test >> drawingFor: aSlider [
 		slider: aSlider
 ]
 
+{ #category : 'as yet unclassified' }
+JuLookAndFeelV4Test >> rotaryDrawing [
+	"V4's knob in 80 x 80 at half travel, with JUCE's default angles."
+	^ JuLookAndFeelV4 new
+		drawRotarySliderIn: (JuRectangle origin: 0 @ 0 extent: 80 @ 80)
+		sliderPos: 1 / 2
+		rotaryStartAngle: Float pi * 1.2
+		rotaryEndAngle: Float pi * 2.8
+		slider: JuSlider rotaryHorizontalVerticalDrag
+]
+
 { #category : 'running' }
 JuLookAndFeelV4Test >> setUp [
 	super setUp.
@@ -34,6 +45,26 @@ JuLookAndFeelV4Test >> testBackgroundTrackSpansTheBounds [
 	self assert: drawing operations first path elements equals: {
 		JuPathStartNewSubPath point: 12 @ 12.
 		JuPathLineTo point: 188 @ 12 }
+]
+
+{ #category : 'tests' }
+JuLookAndFeelV4Test >> testBarFillsUpToTheSliderPos [
+	| bar drawing fill outline |
+	bar := JuSlider linearBar.
+	bar forceLayout.
+	drawing := JuLookAndFeelV4 new
+		drawLinearSliderIn: (JuRectangle origin: 1 @ 1 extent: 198 @ 22)
+		sliderPos: 100
+		minSliderPos: 1
+		maxSliderPos: 1
+		slider: bar.
+	fill := drawing operations first bounds.
+	outline := drawing operations second operations first.
+	self
+		assert: fill origin equals: 1 @ 1.5;
+		assert: fill extent equals: 99 @ 21;
+		assert: outline bounds extent equals: 200 @ 24;
+		assert: outline lineThickness equals: 1
 ]
 
 { #category : 'running' }
@@ -54,6 +85,28 @@ JuLookAndFeelV4Test >> testMissingColourIsResumableBlack [
 	self
 		assert: ([ lookAndFeel findColour: #noSuchColour ] on: JuMissingColour do: [ :warning | warning resume ])
 		equals: Color black
+]
+
+{ #category : 'tests' }
+JuLookAndFeelV4Test >> testRotaryArcsFollowTheAngles [
+	| background valueArc |
+	background := self rotaryDrawing operations first.
+	valueArc := self rotaryDrawing operations second path elements first.
+	self
+		assert: background strokeType strokeThickness equals: 8;
+		assert: background path elements first radii equals: 26 @ 26;
+		assert: background path elements first toAngle equals: Float pi * 2.8;
+		assert: (valueArc toAngle closeTo: Float twoPi)
+]
+
+{ #category : 'tests' }
+JuLookAndFeelV4Test >> testRotaryThumbSitsAtTheValueAngle [
+	| thumb |
+	thumb := self rotaryDrawing operations third bounds.
+	self
+		assert: (thumb center x closeTo: 40);
+		assert: (thumb center y closeTo: 14);
+		assert: thumb extent equals: 16 @ 16
 ]
 
 { #category : 'tests' }

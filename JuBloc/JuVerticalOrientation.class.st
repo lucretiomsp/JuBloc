@@ -14,6 +14,14 @@ JuVerticalOrientation >> alongAxis: aNumber [
 	^ 0 @ aNumber
 ]
 
+{ #category : 'as yet unclassified' }
+JuVerticalOrientation >> barIn: aJuRectangle at: sliderPos [
+	"V4: Rectangle<float> (x + 0.5f, sliderPos, width - 1.0f, y + (height - sliderPos))."
+	^ JuRectangle
+		origin: (aJuRectangle left + 0.5) @ sliderPos
+		extent: (aJuRectangle width - 1) @ (aJuRectangle bottom - sliderPos)
+]
+
 { #category : 'testing' }
 JuVerticalOrientation >> centreLineOf: aJuRectangle [
 	^ aJuRectangle left + (aJuRectangle width * 0.5)

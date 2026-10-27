@@ -14,6 +14,14 @@ JuHorizontalOrientation >> alongAxis: aNumber [
 	^ aNumber @ 0
 ]
 
+{ #category : 'as yet unclassified' }
+JuHorizontalOrientation >> barIn: aJuRectangle at: sliderPos [
+	"V4: Rectangle<float> (x, y + 0.5f, sliderPos - x, height - 1.0f)."
+	^ JuRectangle
+		origin: aJuRectangle left @ (aJuRectangle top + 0.5)
+		extent: (sliderPos - aJuRectangle left) @ (aJuRectangle height - 1)
+]
+
 { #category : 'private' }
 JuHorizontalOrientation >> centreLineOf: aJuRectangle [
 	^ aJuRectangle top + (aJuRectangle height * 0.5)

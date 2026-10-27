@@ -1,5 +1,27 @@
 "
-I am what a slider looks like, and I map to JUCE''s Slider::SliderStyle enum. That enum flattens four independent axes into 13 values: orientation, value count, bar-ness, and (for the rotary family only) drag mode. I hold those axes separately, one composed strategy each. For now only orientation exists; the rest arrive when two-value, bar or rotary styles do. Do not turn me into slider subclasses: a hierarchy has to pick one axis for its spine and there are four.
+I am the information in JUCE's Slider::SliderStyle enum, as objects. The enum flattens four independent axes into 13 values: the family (linear, rotary, inc/dec buttons), the linear variant (plain, bar, two-value, three-value), the orientation (linear only) and the drag mode (rotary only).
+
+Responsibility.
+I decide what Slider::Pimpl decides inside juce::Slider: which drawing to ask the look and feel for (paint:), how the mouse drags (dragStartingAt:for:), and the predicates JUCE tests (isBar, isRotary). Pimpl is never emitted, so polymorphism here instead of enum tests costs no mappability.
+
+My subclasses split by family, then by variant: JuLinearSliderStyle (the plain linear slider) with its subclass JuLinearBarSliderStyle, and JuRotarySliderStyle. Each variant exists only inside its family, so the hierarchy stays a tree, never a cross product. Orientation multiplies with the variant (every linear variant comes horizontal and vertical), so it is composed instead: the linear family holds a JuSliderOrientation. The rotary drag mode changes only the drag, so it will be a slot on the rotary family too.
+
+JuSlider stays one class, as juce::Slider is: the style varies, not the slider.
+
+The look and feel still tests isBar and isRotary inside its drawing and layout methods, as LookAndFeel_V4 and V2 do. Those are the methods a custom look and feel overrides and the emitter prints, so they keep JUCE's shape.
+
+Collaborators.
+JuSlider holds one of my instances and delegates paint and the mouse to it. JuLookAndFeel draws what I ask for. The JuSliderDrag subclasses are the drags I create.
+
+Public API and Key Messages.
+- JuSliderStyle linearHorizontal, linearVertical, linearBar, linearBarVertical, rotaryHorizontalVerticalDrag  one per JUCE enum value ported so far
+- paint: aSlider  answers a JuDrawing
+- dragStartingAt: aPoint for: aSlider  answers a JuSliderDrag for one gesture
+- defaultExtent  the preview's starting size
+- isBar, isRotary
+
+Implementation Points.
+- Not ported: the TwoValue and ThreeValue styles; the Rotary, RotaryHorizontalDrag and RotaryVerticalDrag drag modes; IncDecButtons. IncDecButtons is a different widget filed under the enum (two buttons, no track, no thumb): if ever needed it becomes a sibling of JuSlider, not a style.
 "
 Class {
 	#name : 'JuSliderStyle',

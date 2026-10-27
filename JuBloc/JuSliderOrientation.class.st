@@ -38,6 +38,12 @@ JuSliderOrientation >> alongAxis: aNumber [
 
 ]
 
+{ #category : 'as yet unclassified' }
+JuSliderOrientation >> barIn: aJuRectangle at: sliderPos [
+	"The filled part of a bar slider."
+	^ self subclassResponsibility
+]
+
 { #category : 'geometry' }
 JuSliderOrientation >> crossExtentOf: aJRectangle [
 	"The extent across my axis: height for horizontal, width for vertical."

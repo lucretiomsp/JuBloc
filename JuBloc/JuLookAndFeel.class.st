@@ -87,6 +87,18 @@ JuLookAndFeel >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSlider
 	^ self subclassResponsibility
 ]
 
+{ #category : 'as yet unclassified' }
+JuLookAndFeel >> drawLinearSliderOutlineIn: aJuRectangle slider: aSlider [
+	"JUCE: drawLinearSliderOutline. Answers a JuDrawing."
+	^ self subclassResponsibility
+]
+
+{ #category : 'as yet unclassified' }
+JuLookAndFeel >> drawRotarySliderIn: aJuRectangle sliderPos: sliderPos rotaryStartAngle: startAngle rotaryEndAngle: endAngle slider: aSlider [
+	"JUCE: drawRotarySlider. Answers a JuDrawing; sliderPos is a proportion, angles are radians clockwise from 12 o'clock."
+	^ self subclassResponsibility
+]
+
 { #category : 'colors' }
 JuLookAndFeel >> findColour: aColourId [
 	"JUCE: LookAndFeel::findColour."

@@ -49,6 +49,26 @@ JuBlocRenderer >> initializeCanvas: anAeCanvas [
 ]
 
 { #category : 'visiting' }
+JuBlocRenderer >> visitDrawRect: anOperation [
+	"Graphics::drawRect: the line lies inside the bounds, filled as four rectangles exactly as JUCE does."
+	| left top width height line |
+	left := anOperation bounds left.
+	top := anOperation bounds top.
+	width := anOperation bounds width.
+	height := anOperation bounds height.
+	line := anOperation lineThickness.
+	canvas pathFactory: [ :aCairoContext |
+		aCairoContext
+			rectangleX: left y: top width: width height: line;
+			rectangleX: left y: top + height - line width: width height: line;
+			rectangleX: left y: top + line width: line height: height - (line * 2);
+			rectangleX: left + width - line y: top + line width: line height: height - (line * 2) ].
+	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
+	canvas setBorderOff.
+	canvas drawFigure
+]
+
+{ #category : 'visiting' }
 JuBlocRenderer >> visitDrawing: aDrawing [
 	aDrawing operations do: [ :each | each acceptVisitor: self ]
 
@@ -66,6 +86,18 @@ JuBlocRenderer >> visitFillEllipse: anOperation [
 			radius: bounds width / 2
 			startAngle: 0
 			endAngle: Float twoPi ].
+	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
+	canvas setBorderOff.
+	canvas drawFigure
+]
+
+{ #category : 'visiting' }
+JuBlocRenderer >> visitFillRect: anOperation [
+	"Graphics::fillRect."
+	| bounds |
+	bounds := anOperation bounds.
+	canvas pathFactory: [ :aCairoContext |
+		aCairoContext rectangleX: bounds left y: bounds top width: bounds width height: bounds height ].
 	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
 	canvas setBorderOff.
 	canvas drawFigure

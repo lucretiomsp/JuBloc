@@ -2,7 +2,13 @@ Class {
 	#name : 'JuPath',
 	#superclass : 'Object',
 	#instVars : [
-		'elements'
+		'elements',
+		'center',
+		'radii',
+		'rotation',
+		'fromAngle',
+		'toAngle',
+		'startAsNewSubPath'
 	],
 	#category : 'JuBloc-Graphics',
 	#package : 'JuBloc',
@@ -19,6 +25,18 @@ JuPath >> = anObject [
 { #category : 'accessing' }
 JuPath >> acceptVisitor: aVisitor [
 	^ aVisitor visitPath: self
+]
+
+{ #category : 'adding' }
+JuPath >> addCentredArc: aCenter radii: aRadiiPoint rotation: aRotation from: fromAngle to: toAngle startAsNewSubPath: aBoolean [
+	"JUCE: Path::addCentredArc. Angles in radians, clockwise from 12 o'clock."
+	elements add: (JuPathAddCentredArc
+		center: aCenter
+		radii: aRadiiPoint
+		rotation: aRotation
+		from: fromAngle
+		to: toAngle
+		startAsNewSubPath: aBoolean)
 ]
 
 { #category : 'accessing' }

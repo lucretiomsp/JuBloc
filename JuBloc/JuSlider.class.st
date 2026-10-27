@@ -21,6 +21,18 @@ Class {
 	#tag : 'Slider'
 }
 
+{ #category : 'instance creation' }
+JuSlider class >> linearBar [
+	"JUCE: Slider (Slider::LinearBar, Slider::NoTextBox)."
+	^ self style: JuSliderStyle linearBar
+]
+
+{ #category : 'instance creation' }
+JuSlider class >> linearBarVertical [
+	"JUCE: Slider (Slider::LinearBarVertical, Slider::NoTextBox)."
+	^ self style: JuSliderStyle linearBarVertical
+]
+
 { #category : 'examples' }
 JuSlider class >> linearHorizontal [
 	"JUCE: Slider (Slider::LinearHorizontal, Slider::NoTextBox)."
@@ -31,6 +43,12 @@ JuSlider class >> linearHorizontal [
 JuSlider class >> linearVertical [
 	"JUCE: Slider (Slider::LinearVertical, Slider::NoTextBox)."
 	^ self style: JuSliderStyle linearVertical
+]
+
+{ #category : 'instance creation' }
+JuSlider class >> rotaryHorizontalVerticalDrag [
+	"JUCE: Slider (Slider::RotaryHorizontalVerticalDrag, Slider::NoTextBox), the usual knob."
+	^ self style: JuSliderStyle rotaryHorizontalVerticalDrag
 ]
 
 { #category : 'accessing' }
@@ -44,20 +62,32 @@ JuSlider class >> style: aSliderStyle [
 
 { #category : 'event handling' }
 JuSlider >> dragTo: aPoint [
-	"JUCE: Pimpl::handleAbsoluteDrag, linear slider snapping to the mouse (its default)."
-	self value: (self proportionOfLengthToValue:
-		(self orientation fractionFor: aPoint in: self sliderBounds))
+	"JUCE: Pimpl::mouseDrag in absolute mode (no velocity drag)."
+	self value: (drag valueAt: aPoint for: self)
 ]
 
 { #category : 'initialization' }
 JuSlider >> initialize [
-	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0, size 0 x 0 (the parent sizes it).
-	 The constructors give the preview its size, from the style."
+	"JUCE's defaults: LinearHorizontal, range 0 to 10, value 0, rotary from 1.2 pi to 2.8 pi,
+	 size 0 x 0 (the parent sizes it). The constructors give the preview its size, from the style."
 	super initialize.
 	style := JuSliderStyle linearHorizontal.
 	range := JuNormalisableRange start: 0 end: 10.
 	value := 0.
+	rotaryParameters := JuRotaryParameters default.
 	onValueChange := [ ]
+]
+
+{ #category : 'event handling' }
+JuSlider >> isBar [
+	"JUCE: Slider::isBar."
+	^ style isBar
+]
+
+{ #category : 'event handling' }
+JuSlider >> isRotary [
+	"JUCE: Slider::isRotary."
+	^ style isRotary
 ]
 
 { #category : 'helpers' }
@@ -68,9 +98,10 @@ JuSlider >> linearSliderPosFor: aValue [
 		in: self sliderBounds
 ]
 
-{ #category : 'event handling' }
+{ #category : 'painting' }
 JuSlider >> mouseDown: aBlMouseEvent [
-	"JUCE: Pimpl::mouseDown, which ends by calling mouseDrag."
+	"JUCE: Pimpl::mouseDown: the drag starts here, then mouseDrag runs once."
+	self startDragAt: aBlMouseEvent localPosition.
 	self mouseDrag: aBlMouseEvent
 ]
 
@@ -78,6 +109,12 @@ JuSlider >> mouseDown: aBlMouseEvent [
 JuSlider >> mouseDrag: aBlMouseEvent [
 	self dragTo: aBlMouseEvent localPosition
 
+]
+
+{ #category : 'event handling' }
+JuSlider >> mouseDragSensitivity [
+	"JUCE: getMouseDragSensitivity, the pixels for a full sweep."
+	^ 250
 ]
 
 { #category : 'accessing' }
@@ -93,16 +130,8 @@ JuSlider >> orientation [
 
 { #category : 'painting' }
 JuSlider >> paint [
-	"JUCE: Pimpl::paint, linear branch. lastValueMin and lastValueMax stay 0 on a single-value
-	 slider, so JUCE passes the position of 0 for both."
-	| unsetPos |
-	unsetPos := self linearSliderPosFor: 0.
-	^ self lookAndFeel
-		drawLinearSliderIn: self sliderBounds
-		sliderPos: (self linearSliderPosFor: value)
-		minSliderPos: unsetPos
-		maxSliderPos: unsetPos
-		slider: self
+	"JUCE: Pimpl::paint. The style picks the linear or the rotary drawing."
+	^ style paint: self
 ]
 
 { #category : 'helpers' }
@@ -123,10 +152,28 @@ JuSlider >> range: aNormalisableRange [
 	self invalidate
 ]
 
+{ #category : 'event handling' }
+JuSlider >> rotaryParameters [
+	"JUCE: getRotaryParameters."
+	^ rotaryParameters
+]
+
+{ #category : 'event handling' }
+JuSlider >> rotaryParameters: aRotaryParameters [
+	"JUCE: setRotaryParameters."
+	rotaryParameters := aRotaryParameters.
+	self invalidate
+]
+
 { #category : 'initialization' }
 JuSlider >> sliderBounds [
 	"JUCE: Pimpl::sliderRect, cached in resized. Recomputed here, so never stale."
 	^ (self lookAndFeel sliderLayoutFor: self) sliderBounds
+]
+
+{ #category : 'event handling' }
+JuSlider >> startDragAt: aPoint [
+	drag := style dragStartingAt: aPoint for: self
 ]
 
 { #category : 'accessing' }
