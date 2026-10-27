@@ -57,7 +57,7 @@ JuSlider >> initialize [
 	self extent: self defaultExtent
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'helpers' }
 JuSlider >> linearSliderPosFor: aValue [
 	"JUCE: Pimpl::getLinearSliderPos."
 	^ self orientation
@@ -88,7 +88,21 @@ JuSlider >> orientation [
  ^ style orientation
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'painting' }
+JuSlider >> paint [
+	"JUCE: Pimpl::paint, linear branch. lastValueMin and lastValueMax stay 0 on a single-value
+	 slider, so JUCE passes the position of 0 for both."
+	| unsetPos |
+	unsetPos := self linearSliderPosFor: 0.
+	^ self lookAndFeel
+		drawLinearSliderIn: self sliderBounds
+		sliderPos: (self linearSliderPosFor: value)
+		minSliderPos: unsetPos
+		maxSliderPos: unsetPos
+		slider: self
+]
+
+{ #category : 'helpers' }
 JuSlider >> proportionOfLengthToValue: aProportion [
 	^ range convertFrom0to1: aProportion
 ]
@@ -140,7 +154,7 @@ JuSlider >> value: aNumber [
 	onValueChange cull: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'helpers' }
 JuSlider >> valueToProportionOfLength: aValue [
 	"JUCE: valueToProportionOfLength, virtual there too."
 	^ range convertTo0to1: aValue

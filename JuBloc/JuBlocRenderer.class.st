@@ -62,11 +62,28 @@ JuBlocRenderer >> visitFillEllipse: anOperation [
 	self assert: bounds width = bounds height description: 'Only circles are rendered so far'.
 	canvas pathFactory: [ :aCairoContext |
 		aCairoContext
-			arcCenter: bounds centre
+			arcCenter: bounds center
 			radius: bounds width / 2
 			startAngle: 0
 			endAngle: Float twoPi ].
 	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
 	canvas setBorderOff.
 	canvas drawFigure
+]
+
+{ #category : 'visiting' }
+JuBlocRenderer >> visitStrokePath: anOperation [
+	"Graphics::strokePath. In JUCE the stroke type is an argument, never Graphics state,
+	 so caps and joins are restored afterwards."
+	canvas restoreContextAfter: [
+		canvas pathFactory: [ :aCairoContext |
+			anOperation path acceptVisitor: (JuCairoPathBuilder on: aCairoContext) ].
+		canvas setBackgroundOff.
+		canvas setBorderBlock: [
+			canvas
+				setSourceColor: anOperation colour;
+				setBorderWidth: anOperation strokeType strokeThickness.
+			self applyStyleOf: anOperation strokeType ].
+		canvas setOutskirtsCentered.
+		canvas drawFigure ]
 ]

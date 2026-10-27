@@ -73,6 +73,16 @@ JuSliderTest >> testPaintRendersOnAnAlexandrieCanvas [
 ]
 
 { #category : 'tests' }
+JuSliderTest >> testRendersThroughBloc [
+	"The whole Bloc pipeline, hook included: the thumb (value 0, x = 12) and the background track."
+	| form |
+	form := slider aeAsForm.
+	self
+		assert: (form colorAt: 12 @ 12) asHexString equals: (slider findColour: #sliderThumb) asHexString;
+		assert: (form colorAt: 150 @ 12) asHexString equals: (slider findColour: #sliderBackground) asHexString
+]
+
+{ #category : 'tests' }
 JuSliderTest >> testValueChangeNotifiesOnlyOnChange [
 	| calls |
 	calls := 0.
