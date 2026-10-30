@@ -3,7 +3,6 @@ Extension { #name : 'Color' }
 { #category : '*JuBloc' }
 Color >> juAlpha [
 	^ (self alpha * 255) rounded
-
 ]
 
 { #category : '*JuBloc' }
@@ -55,20 +54,7 @@ Color >> juPerceivedBrightness [
 { #category : '*JuBloc' }
 Color class >> juR: r g: g b: b a: a [
 	"juce::Colour (uint8 r, uint8 g, uint8 b, uint8 a): JUCE keeps 8 bits a channel."
-
-	| aColor |
-	aColor := self new.
-
-	^ (aColor
-		   r: r
-		   g: g
-		   b: b
-		   range: 255) alpha: a / 255.0
-]
-
-{ #category : '*JuBloc' }
-Color >> juR: r g: g b: b a: a [ 
-	^ self class juR: r g: g b: b a: a 
+	^ (self r: r g: g b: b range: 255) alpha: a / 255.0
 ]
 
 { #category : '*JuBloc' }
@@ -80,7 +66,7 @@ Color >> juRed [
 { #category : '*JuBloc' }
 Color >> juWithAlpha: aFloat [
 	"JUCE: withAlpha (float). alpha: truncates (0.05 gives 12); JUCE rounds (13)."
-	^ self alpha: (aFloat * 255) rounded / 25
+	^ self alpha: (aFloat * 255) rounded / 255.0
 ]
 
 { #category : '*JuBloc' }
