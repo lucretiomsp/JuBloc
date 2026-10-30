@@ -82,6 +82,12 @@ JuLookAndFeel class >> isAbstract [
 ]
 
 { #category : 'drawing' }
+JuLookAndFeel >> drawButtonBackground: aButton backgroundColour: aColour highlighted: shouldDrawButtonAsHighlighted down: shouldDrawButtonAsDown [
+	"JUCE: drawButtonBackground. Answers a JuDrawing."
+	^ self subclassResponsibility
+]
+
+{ #category : 'drawing' }
 JuLookAndFeel >> drawLinearSliderIn: aJuRectangle sliderPos: sliderPos minSliderPos: minSliderPos maxSliderPos: maxSliderPos slider: aSlider [
 	"JUCE: drawLinearSlider. Answers a JuDrawing; positions are pixels along the slider's axis."
 	^ self subclassResponsibility

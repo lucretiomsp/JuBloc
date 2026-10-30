@@ -33,6 +33,13 @@ JuPath >> addCentredArc: aCenter radii: aRadiiPoint rotation: aRotation from: fr
 		startAsNewSubPath: aBoolean)
 ]
 
+{ #category : 'adding' }
+JuPath >> addRoundedRectangle: aJuRectangle cornerSize: aCornerSize [
+	"JUCE: Path::addRoundedRectangle (rectangle, cornerSize), all four corners curved."
+	elements add: (JuPathAddRoundedRectangle bounds: aJuRectangle cornerSize: aCornerSize)
+
+]
+
 { #category : 'accessing' }
 JuPath >> elements [
 	"A snapshot: my own collection never leaves me."

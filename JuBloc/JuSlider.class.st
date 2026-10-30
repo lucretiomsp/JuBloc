@@ -98,17 +98,17 @@ JuSlider >> linearSliderPosFor: aValue [
 		in: self sliderBounds
 ]
 
-{ #category : 'painting' }
-JuSlider >> mouseDown: aBlMouseEvent [
+{ #category : 'event handling' }
+JuSlider >> mouseDown: aMouseEvent [
 	"JUCE: Pimpl::mouseDown: the drag starts here, then mouseDrag runs once."
-	self startDragAt: aBlMouseEvent localPosition.
-	self mouseDrag: aBlMouseEvent
+	self startDragAt: aMouseEvent position.
+	self mouseDrag: aMouseEvent
+
 ]
 
 { #category : 'event handling' }
-JuSlider >> mouseDrag: aBlMouseEvent [
-	self dragTo: aBlMouseEvent localPosition
-
+JuSlider >> mouseDrag: aMouseEvent [
+	self dragTo: aMouseEvent position
 ]
 
 { #category : 'event handling' }

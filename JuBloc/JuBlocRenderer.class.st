@@ -21,12 +21,31 @@ JuBlocRenderer class >> endSelectors [
 ]
 
 { #category : 'style' }
+JuBlocRenderer class >> endStyles [
+	"PathStrokeType::EndCapStyle to Alexandrie."
+	^ Dictionary newFrom: {
+		#butt -> [ :aCanvas | aCanvas setCapButt ].
+		#square -> [ :aCanvas | aCanvas setCapSquare ].
+		#rounded -> [ :aCanvas | aCanvas setCapRound ] }
+]
+
+{ #category : 'style' }
 JuBlocRenderer class >> jointSelectors [
 	"PathStrokeType::JointStyle to Alexandrie. Both sit on Cairo: 1:1, nothing lost."
 	^ Dictionary newFrom: {
 		#mitered -> #setJoinMiter.
 		#curved -> #setJoinRound.
 		#beveled -> #setJoinBevel }
+]
+
+{ #category : 'style' }
+JuBlocRenderer class >> jointStyles [
+	"PathStrokeType::JointStyle to Alexandrie, which has only setJoinMiter: limit.
+	 JUCE's default miter limit, 4, is the same ratio Cairo uses."
+	^ Dictionary newFrom: {
+		#mitered -> [ :aCanvas | aCanvas setJoinMiter: 4.0 ].
+		#curved -> [ :aCanvas | aCanvas setJoinRound ].
+		#beveled -> [ :aCanvas | aCanvas setJoinBevel ] }
 ]
 
 { #category : 'instance creation' }
@@ -38,14 +57,31 @@ JuBlocRenderer class >> on: anAeCanvas [
 
 { #category : 'as yet unclassified' }
 JuBlocRenderer >> applyStyleOf: aStrokeType [
-	canvas
-		perform: (self class jointSelectors at: aStrokeType jointStyle);
-		perform: (self class endSelectors at: aStrokeType endStyle)
+	(self class jointStyles at: aStrokeType jointStyle) value: canvas.
+	(self class endStyles at: aStrokeType endStyle) value: canvas
+]
+
+{ #category : 'as yet unclassified' }
+JuBlocRenderer >> fillPath: aJuPath colour: aColour [
+	"Graphics::fillPath."
+	canvas pathFactory: [ :aCairoContext |
+		aJuPath acceptVisitor: (JuCairoPathBuilder on: aCairoContext) ].
+	canvas setBackgroundWith: [ canvas setSourceColor: aColour ].
+	canvas setBorderOff.
+	canvas drawFigure
 ]
 
 { #category : 'initialization' }
 JuBlocRenderer >> initializeCanvas: anAeCanvas [
 	canvas := anAeCanvas
+]
+
+{ #category : 'as yet unclassified' }
+JuBlocRenderer >> roundedRectanglePathOf: anOperation [
+	^ JuPath new
+		addRoundedRectangle: anOperation bounds cornerSize: anOperation cornerSize;
+		yourself
+
 ]
 
 { #category : 'visiting' }
@@ -66,6 +102,15 @@ JuBlocRenderer >> visitDrawRect: anOperation [
 	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
 	canvas setBorderOff.
 	canvas drawFigure
+]
+
+{ #category : 'as yet unclassified' }
+JuBlocRenderer >> visitDrawRoundedRectangle: anOperation [
+	"Graphics::drawRoundedRectangle: the same path, stroked with PathStrokeType (lineThickness)."
+	self visitStrokePath: (JuStrokePath
+		path: (self roundedRectanglePathOf: anOperation)
+		strokeType: (JuPathStrokeType strokeThickness: anOperation lineThickness)
+		colour: anOperation colour)
 ]
 
 { #category : 'visiting' }
@@ -101,6 +146,14 @@ JuBlocRenderer >> visitFillRect: anOperation [
 	canvas setBackgroundWith: [ canvas setSourceColor: anOperation colour ].
 	canvas setBorderOff.
 	canvas drawFigure
+]
+
+{ #category : 'as yet unclassified' }
+JuBlocRenderer >> visitFillRoundedRectangle: anOperation [
+	"Graphics::fillRoundedRectangle. JUCE's default context fills Path::addRoundedRectangle."
+	self
+		fillPath: (self roundedRectanglePathOf: anOperation)
+		colour: anOperation colour
 ]
 
 { #category : 'visiting' }

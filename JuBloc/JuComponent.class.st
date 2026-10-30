@@ -43,7 +43,8 @@ Class {
 	#superclass : 'BlElement',
 	#instVars : [
 		'colours',
-		'lookAndFeel'
+		'lookAndFeel',
+		'mouseState'
 	],
 	#category : 'JuBloc-Component',
 	#package : 'JuBloc',
@@ -65,6 +66,14 @@ JuComponent >> findColour: aColourId [
 		ifAbsent: [ self lookAndFeel findColour: aColourId ]
 ]
 
+{ #category : 'event handling' }
+JuComponent >> hasKeyboardFocus: trueIfChildIsFocused [
+	"JUCE: hasKeyboardFocus. JUCE's grab on mouse click is not ported yet."
+	^ trueIfChildIsFocused
+		ifTrue: [ self hasFocus ]
+		ifFalse: [ self isFocused ]
+]
+
 { #category : 'initialization' }
 JuComponent >> initialize [
 	super initialize.
@@ -74,17 +83,69 @@ JuComponent >> initialize [
 ]
 
 { #category : 'initialization' }
+JuComponent >> initializeHoverCallbacks [
+	self
+		addEventHandlerOn: BlMouseMoveEvent do: [ :anEvent |
+			anEvent consume.
+			self mouseMovedAt: anEvent localPosition ];
+		addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent |
+			self mouseEnteredAt: anEvent localPosition ];
+		addEventHandlerOn: BlMouseLeaveEvent do: [ :anEvent |
+			self mouseExitedAt: anEvent localPosition ]
+]
+
+{ #category : 'initialization' }
 JuComponent >> initializeMouseCallbacks [
-	"Consuming keeps events off the parent, as in JUCE, and a consumed drag start
-	 is what makes Bloc keep sending the drag here."
+	"Adapter. Consuming keeps events off the parent, as in JUCE, and a consumed drag start
+	 makes Bloc keep sending the drag here. mouseState rebuilds JUCE's implicit capture."
+	mouseState := JuMouseUncaptured new.
+	self
+		initializePressCallbacks;
+		initializeReleaseCallbacks;
+		initializeHoverCallbacks
+]
+
+{ #category : 'initialization' }
+JuComponent >> initializePressCallbacks [
 	self
 		addEventHandlerOn: BlMouseDownEvent do: [ :anEvent |
 			anEvent consume.
-			self mouseDown: anEvent ];
+			self mousePressedAt: anEvent localPosition ];
 		addEventHandlerOn: BlDragStartEvent do: [ :anEvent | anEvent consume ];
 		addEventHandlerOn: BlDragEvent do: [ :anEvent |
 			anEvent consume.
-			self mouseDrag: anEvent ]
+			self mouseMovedAt: anEvent localPosition ]
+]
+
+{ #category : 'initialization' }
+JuComponent >> initializeReleaseCallbacks [
+	"Bloc ends a press in one of three events: a mouse up over me, a drag end after a drag,
+	 or a click aborted when released over something else. The aborted event's position is
+	 the press; the release is its up event's, in space coordinates."
+	self
+		addEventHandlerOn: BlMouseUpEvent do: [ :anEvent |
+			anEvent consume.
+			self mouseReleasedAt: anEvent localPosition ];
+		addEventHandlerOn: BlDragEndEvent do: [ :anEvent |
+			anEvent consume.
+			self mouseReleasedAt: anEvent localPosition ];
+		addEventHandlerOn: BlClickAbortedEvent do: [ :anEvent |
+			anEvent consume.
+			self mouseReleasedAt: (self globalPointToLocal: anEvent upEvent position) ]
+]
+
+{ #category : 'event handling' }
+JuComponent >> isEnabled [
+	"JUCE: isEnabled. Bloc's core has no enablement, so I will own the flag as
+	 juce::Component does. Not ported yet."
+	^ true
+]
+
+{ #category : 'event handling' }
+JuComponent >> isMouseButtonDown [
+	"JUCE: isMouseButtonDown, for a press that started on me."
+	^ mouseState isMouseButtonDown
+
 ]
 
 { #category : 'lookAndFeel' }
@@ -121,6 +182,58 @@ JuComponent >> mouseDown: aBlMouseEvent [
 { #category : 'event handling' }
 JuComponent >> mouseDrag: aBlMouseEvent [
 	"JUCE: Component::mouseDrag, empty."
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseEnter: aMouseEvent [
+	"JUCE: Component::mouseEnter, empty."
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseEnteredAt: aPoint [
+	mouseState := mouseState enterAt: aPoint on: self
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseExit: aMouseEvent [
+	"JUCE: Component::mouseExit, empty."
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseExitedAt: aPoint [
+	mouseState := mouseState exitAt: aPoint on: self
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseMove: aMouseEvent [
+	"JUCE: Component::mouseMove, empty."
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseMovedAt: aPoint [
+	mouseState := mouseState moveAt: aPoint on: self
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mousePressedAt: aPoint [
+	mouseState := mouseState pressAt: aPoint on: self
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseReleasedAt: aPoint [
+	mouseState := mouseState releaseAt: aPoint on: self
+
+]
+
+{ #category : 'event handling' }
+JuComponent >> mouseUp: aMouseEvent [
+	"JUCE: Component::mouseUp, empty."
 ]
 
 { #category : 'painting' }

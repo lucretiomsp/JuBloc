@@ -40,6 +40,10 @@ JuLookAndFeelV4 >> colourTable [
 	| scheme |
 	scheme := currentColourScheme.
 	^ {
+		#textButton.                (scheme getUIColour: #widgetBackground).
+		#textButtonOn.              (scheme getUIColour: #highlightedFill).
+		#textButtonTextOn.          (scheme getUIColour: #highlightedText).
+		#textButtonTextOff.         (scheme getUIColour: #defaultText).
 		#sliderBackground.          (scheme getUIColour: #widgetBackground).
 		#sliderThumb.               (scheme getUIColour: #defaultFill).
 		#sliderTrack.               (scheme getUIColour: #highlightedFill).
@@ -49,6 +53,7 @@ JuLookAndFeelV4 >> colourTable [
 		#sliderTextBoxBackground.   ((scheme getUIColour: #widgetBackground) alpha: 0.0).
 		#sliderTextBoxHighlight.    ((scheme getUIColour: #defaultFill) alpha: 0.4).
 		#sliderTextBoxOutline.      (scheme getUIColour: #outline).
+		#comboBoxOutline.           (scheme getUIColour: #outline).
 		#labelText.                 (scheme getUIColour: #defaultText).
 		#labelBackground.           Color transparent.
 		#labelOutline.              Color transparent.
@@ -59,6 +64,25 @@ JuLookAndFeelV4 >> colourTable [
 JuLookAndFeelV4 >> currentColourScheme [
 	"JUCE: getCurrentColourScheme."
 	^ currentColourScheme
+]
+
+{ #category : 'drawing' }
+JuLookAndFeelV4 >> drawButtonBackground: aButton backgroundColour: aColour highlighted: shouldDrawButtonAsHighlighted down: shouldDrawButtonAsDown [
+	"JUCE: LookAndFeel_V4::drawButtonBackground, the branch without connected edges."
+	| bounds baseColour |
+	bounds := aButton localBounds reduced: 0.5.
+	baseColour := (aColour juWithMultipliedSaturation:
+			((aButton hasKeyboardFocus: true) ifTrue: [ 1.3 ] ifFalse: [ 0.9 ]))
+		juWithMultipliedAlpha: (aButton isEnabled ifTrue: [ 1.0 ] ifFalse: [ 0.5 ]).
+	(shouldDrawButtonAsDown or: [ shouldDrawButtonAsHighlighted ]) ifTrue: [
+		baseColour := baseColour juContrasting: (shouldDrawButtonAsDown ifTrue: [ 0.2 ] ifFalse: [ 0.05 ]) ].
+	^ JuDrawing withAll: {
+		JuFillRoundedRectangle bounds: bounds cornerSize: 6 colour: baseColour.
+		JuDrawRoundedRectangle
+			bounds: bounds
+			cornerSize: 6
+			lineThickness: 1
+			colour: (aButton findColour: #comboBoxOutline) }
 ]
 
 { #category : 'drawing' }
